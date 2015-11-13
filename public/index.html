@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <title>Animation Station</title>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <!-- include Google's AJAX API loader -->
+    <script src="http://www.google.com/jsapi"></script>
+    <!-- load JQuery and UI from Google (need to use UI to animate colors) -->
+    <script type="text/javascript">
+    google.load("jqueryui", "1.5.2");
+    </script>
+
+    <style>
+    body {
+      background-color: black;
+    }
+    .box {
+      position: absolute;
+      opacity: 0.8;
+      background:red;
+      -webkit-transition:background 1s;
+      -moz-transition:background 1s;
+      -o-transition:background 1s;
+      transition:background 1s
+    }
+    .box.yellow {background:yellow}
+    </style>
+    <script>
+    var getRandCoords = function() {
+      return [Math.random() * 120, Math.random() * 120, Math.random() * 50, Math.random() * 50, Math.random() * 255, Math.random() * 255, Math.random() * 255];
+    };
+
+    var moveBox = function(box) {
+      setTimeout(function() {
+        var newRandCoords = getRandCoords();
+        box.velocity({
+          top: newRandCoords[0]-20+'%',
+          left: newRandCoords[1]-20+'%',
+          width: newRandCoords[2] + '%',
+          height: newRandCoords[3] + '%',
+        }, (Math.random() > 0.3) ? Math.random()*200 : Math.random()*2200, function() {
+          moveBox(box);
+        });
+        box.toggleClass('yellow');
+      }, (Math.random() > 0.3) ? Math.random()*1000 : Math.random()*2200);
+    }
+
+    $(function() {
+
+      $('body').click(function() {
+        $('.box').fadeOut(900, function() {
+          $(this).remove();
+        });
+      });
+
+      var createBox = function() {
+        var myRandCoords = getRandCoords();
+        var newBox = $('<div class="box"></div>');
+        newBox.css('top', myRandCoords[0]-20 + '%');
+        newBox.css('left', myRandCoords[1]-20 + '%');
+        newBox.css('width', myRandCoords[2] + '%');
+        newBox.css('height', myRandCoords[3] + '%');
+        // newBox.css('background-color', 'blue');
+        $('body').append(newBox);
+        moveBox(newBox);
+      }
+
+      var numBoxs = 3;
+      for (var i = 0; i < numBoxs; i++) {
+        createBox();
+      }
+
+      setInterval(function() {
+        createBox();
+      }, 1000);
+
+    });
+    </script>
+  </head>
+  <body>
+
+  </body>
+</html>
